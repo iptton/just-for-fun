@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<canvas id="canvas" width=800 height=600 style="border:solid 1px red"></canvs>
+
+<script>
+	function $(id){return document.getElementById(id);}
+	var ctx;
+	var translates;
+	var count = 200;
+	window.onload = function(){
+		ctx = $('canvas').getContext('2d');
+		//setInterval(draw,1000);
+		draw(8);
+	};
+	var s = [[0,0] ,[1/3,0], [0.5,Math.sqrt(3)/6],[2/3,0],[1,0] ];
+	
+	
+	var interval = 0;
+	var DD = {};
+	DD[1] =  generateData(1,600,0,0,600,0);
+	DD[2] =  generateData(2,600,0,0,600,0);
+	DD[3] =  generateData(3,600,0,0,600,0);
+	DD[4] =  generateData(4,600,0,0,600,0);
+	DD[5] =  generateData(5,600,0,0,600,0);
+	DD[6] =  generateData(6,600,0,0,600,0);
+	DD[7] =  generateData(7,600,0,0,600,0);
+	DD[8] =  generateData(8,600,0,0,600,0);
+	DD[9] =  generateData(9,600,0,0,600,600);
+	function draw(interval){
+		interval++;
+		var r = DD[''+interval];
+		if(!DD[''+interval]){
+			r = DD[''+interval] = generateData(interval,600,0,0,600,0);
+		}
+		ctx.beginPath();
+		ctx.moveTo(r[0][0],r[0][1]);
+		for(var i=1;i<r.length;++i){
+			ctx.lineTo(r[i][0],r[i][1]);
+		}
+		ctx.stroke();
+		
+	}
+	
+	function generateData(count,length,x,y,x1,y1,excludeStartAndEnd){
+		var d = [0,60,-30,0];
+		var cornerX = length/2;
+		var result = [];
+		
+		var lastX = x;
+		var lastY = y;
+
+		if(!excludeStartAndEnd){
+			result.push([
+				lastX,//x
+				lastY,//y
+			]);// point 0
+		}
+		for(var i=1;i<5;i++){
+			var nextPos = rotate([lastX,lastY],[x1,y1],d[i-1],length/3);
+			if(1 !== count){
+				Array.prototype.push.apply(result,
+					generateData(
+						count-1,
+						length/3,
+						lastX,lastY,
+						nextPos[0],nextPos[1]
+						,true)
+				);
+			}
+			lastX = nextPos[0];
+			lastY = nextPos[1];
+			if(!excludeStartAndEnd || i!=4){
+				result.push([
+					lastX,//x
+					lastY,//y
+				]);// point 0
+			}
+		}
+		return result;
+	}
+	function rotate(pos,pos1,degIncrease,dl){
+		var dx = pos1[0] - pos[0];
+		var dy = pos1[1] - pos[1];
+		//var deg = Math.atan( dy / dx);
+		var ddl = Math.sqrt(dy*dy + dx*dx);
+		//console.info(ddl,dl);
+		var dd = dl/ddl;
+		dx *= dd;
+		dy *= dd; 
+		//console.info(dx,dy);
+		
+		var deg = degIncrease/180*Math.PI;
+		var cos = Math.cos(deg);
+		var sin = Math.sin(deg);
+		//console.info(cos,sin);
+		
+		var rx = dx*cos - dy*sin + pos[0];
+		var ry = dx*sin + dy*cos + pos[1];
+		return [rx,ry];
+	}
+</script>
+</body>
+</html>
