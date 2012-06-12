@@ -20,15 +20,15 @@
 	
 	var interval = 0;
 	var DD = {};
-	DD[1] =  generateData(1,600,0,0,600,0);
-	DD[2] =  generateData(2,600,0,0,600,0);
-	DD[3] =  generateData(3,600,0,0,600,0);
-	DD[4] =  generateData(4,600,0,0,600,0);
-	DD[5] =  generateData(5,600,0,0,600,0);
-	DD[6] =  generateData(6,600,0,0,600,0);
-	DD[7] =  generateData(7,600,0,0,600,0);
-	DD[8] =  generateData(8,600,0,0,600,0);
-	DD[9] =  generateData(9,600,0,0,600,600);
+	DD[1] =  generateData(1,0,0,600,0);
+	DD[2] =  generateData(2,0,0,600,0);
+	DD[3] =  generateData(3,0,0,600,0);
+	DD[4] =  generateData(4,0,0,600,0);
+	DD[5] =  generateData(5,0,0,600,0);
+	DD[6] =  generateData(6,0,0,600,0);
+	DD[7] =  generateData(7,0,0,600,0);
+	DD[8] =  generateData(8,0,0,600,0);
+	DD[9] =  generateData(9,0,0,600,600);
 	function draw(interval){
 		interval++;
 		var r = DD[''+interval];
@@ -44,7 +44,8 @@
 		
 	}
 	
-	function generateData(count,length,x,y,x1,y1,excludeStartAndEnd){
+	function generateData(count,x,y,x1,y1,excludeStartAndEnd){
+		var length = Math.sqrt((y1-y)*(y1-y)+(x1-x)*(x1-x));
 		var d = [0,60,-30,0];
 		var cornerX = length/2;
 		var result = [];
